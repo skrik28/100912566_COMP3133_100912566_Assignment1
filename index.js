@@ -3,7 +3,7 @@ const { ApolloServer } = require('apollo-server-express');
 const mongoose = require('mongoose');
 const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
-const { authMiddleware } = require('./middleware/auth');
+const { authMiddleware } = require('./utils/auth');
 
 const app = express();
 
