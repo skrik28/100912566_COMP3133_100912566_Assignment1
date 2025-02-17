@@ -27,23 +27,32 @@ const resolvers = {
       return Employee.find();
     },
 
-    employee: async (parent, { id }, context) => {
+    employee: async (_, { id }, context) => {
       // if (!context.user) {
       //   throw new AuthenticationError('You need to be logged in!');
       // }
       return Employee.findById(id);
     },
 
-    employeesByFilter: async (parent, { designation, department }, context) => {
+    employeesByFilter: async (_, { designation, department }, context) => {
       // if (!context.user) {
       //   throw new AuthenticationError('You need to be logged in!');
       // }
 
-      const filter = {};
-      if (designation) filter.designation = designation;
-      if (department) filter.department = department;
+      // const filter = {};
+      // if (designation) filter.designation = designation;
+      // if (department) filter.department = department;
 
-      return Employee.find(filter);
+      // return await Employee.find(filter);
+
+      if (designation){
+        return await Employee.find({ designation });
+      } else if (department){
+        return await Employee.find({ department });
+      }
+
+      return [];
+      
     }
   },
 
@@ -83,7 +92,7 @@ const resolvers = {
       return newEmployee;
     },
 
-    updateEmployee: async (parent, { id, ...args }, context) => {
+    updateEmployee: async (_, { id, ...args }, context) => {
       // if (!context.user) {
       //   throw new AuthenticationError('You need to be logged in!');
       // }
@@ -96,7 +105,7 @@ const resolvers = {
       );
     },
 
-    deleteEmployee: async (parent, { id }, context) => {
+    deleteEmployee: async (_, { id }, context) => {
       // if (!context.user) {
       //   throw new AuthenticationError('You need to be logged in!');
       // }
