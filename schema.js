@@ -57,6 +57,7 @@ const typeDefs = gql`
       gender: String
       designation: String
       salary: Float
+      date_of_joining: String
       department: String
       employee_photo: String
     ): Employee

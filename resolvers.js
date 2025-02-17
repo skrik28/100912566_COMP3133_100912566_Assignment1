@@ -89,7 +89,7 @@ const resolvers = {
       // }
 
       // validateEmployee(args, true);
-      return Employee.findByIdAndUpdate(
+      return await Employee.findByIdAndUpdate(
         id,
         { $set: args },
         { new: true, runValidators: true }
