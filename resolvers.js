@@ -5,7 +5,7 @@ const { validateEmployee } = require('./utils/validators');
 
 const resolvers = {
   Query: {
-    login: async (parent, { username, password }) => {
+    login: async (_, { username, password }) => {
       const user = await User.findOne({ $or: [{ username }, { email: username }] });
       if (!user) {
         throw new AuthenticationError('Invalid credentials');
@@ -16,28 +16,28 @@ const resolvers = {
         throw new AuthenticationError('Invalid credentials');
       }
 
-      const token = signToken(user);
-      return { token, user };
+      // const token = signToken(user);
+      return user;
     },
 
-    employees: async (parent, args, context) => {
-      if (!context.user) {
-        throw new AuthenticationError('You need to be logged in!');
-      }
+    employees: async (_, __, context) => {
+      // if (!context.user) {
+      //   throw new AuthenticationError('You need to be logged in!');
+      // }
       return Employee.find();
     },
 
     employee: async (parent, { id }, context) => {
-      if (!context.user) {
-        throw new AuthenticationError('You need to be logged in!');
-      }
+      // if (!context.user) {
+      //   throw new AuthenticationError('You need to be logged in!');
+      // }
       return Employee.findById(id);
     },
 
     employeesByFilter: async (parent, { designation, department }, context) => {
-      if (!context.user) {
-        throw new AuthenticationError('You need to be logged in!');
-      }
+      // if (!context.user) {
+      //   throw new AuthenticationError('You need to be logged in!');
+      // }
 
       const filter = {};
       if (designation) filter.designation = designation;
@@ -48,27 +48,47 @@ const resolvers = {
   },
 
   Mutation: {
-    signup: async (parent, args) => {
-      const user = await User.create(args);
-      const token = signToken(user);
-      return { token, user };
+    signup: async (_, { username, email, password }) => {
+      const user = new User({
+        username,
+        email,
+        password
+      });
+      const newUser = await user.save();
+      // const token = signToken(user);
+      return newUser;
     },
 
-    addEmployee: async (parent, args, context) => {
-      if (!context.user) {
-        throw new AuthenticationError('You need to be logged in!');
-      }
+    addEmployee: async (_, { first_name, last_name, email, gender, designation, salary, date_of_joining, department, employee_photo }, context) => {
+      // if (!context.user) {
+      //   throw new AuthenticationError('You need to be logged in!');
+      // }
 
-      validateEmployee(args);
-      return Employee.create(args);
+      // validateEmployee(args);
+
+      const employee = new Employee({
+        first_name,
+        last_name,
+        email,
+        gender,
+        designation,
+        salary,
+        date_of_joining,
+        department,
+        employee_photo
+      });
+
+      const newEmployee = await employee.save();
+
+      return newEmployee;
     },
 
     updateEmployee: async (parent, { id, ...args }, context) => {
-      if (!context.user) {
-        throw new AuthenticationError('You need to be logged in!');
-      }
+      // if (!context.user) {
+      //   throw new AuthenticationError('You need to be logged in!');
+      // }
 
-      validateEmployee(args, true);
+      // validateEmployee(args, true);
       return Employee.findByIdAndUpdate(
         id,
         { $set: args },
@@ -77,9 +97,9 @@ const resolvers = {
     },
 
     deleteEmployee: async (parent, { id }, context) => {
-      if (!context.user) {
-        throw new AuthenticationError('You need to be logged in!');
-      }
+      // if (!context.user) {
+      //   throw new AuthenticationError('You need to be logged in!');
+      // }
 
       const result = await Employee.findByIdAndDelete(id);
       return !!result;

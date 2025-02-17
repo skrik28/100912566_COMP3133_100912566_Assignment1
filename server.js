@@ -5,6 +5,10 @@ const typeDefs = require('./schema');
 const resolvers = require('./resolvers');
 const { authMiddleware } = require('./utils/auth');
 
+// Access .env variables
+const dotenv = require('dotenv');
+dotenv.config();
+
 const app = express();
 
 // MongoDB connection

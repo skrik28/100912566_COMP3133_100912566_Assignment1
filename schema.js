@@ -30,14 +30,14 @@ const typeDefs = gql`
   }
 
   type Query {
-    login(username: String!, password: String!): Auth
+    login(username: String!, password: String!): User
     employees: [Employee]!
     employee(id: ID!): Employee
     employeesByFilter(designation: String, department: String): [Employee]!
   }
 
   type Mutation {
-    signup(username: String!, email: String!, password: String!): Auth
+    signup(username: String!, email: String!, password: String!): User
     addEmployee(
       first_name: String!
       last_name: String!
